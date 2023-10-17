@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser'
 import 'dotenv/config'
 import express from 'express'
 import morgan from 'morgan'
+import { morganMiddleware,systemLogs } from './utils/logger.js'
 
 const app = express()
 
@@ -14,8 +15,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
+app.use(morganMiddleware)
+
 app.get('/api/v1/test', (req, res) => {
-  console.log(req.headers)
   res.json({ Hi: 'Welcome to Invoice App' })
 })
 
@@ -24,4 +26,5 @@ const NODE_ENV = process.env.NODE_ENV || 'development'
 
 app.listen(PORT, () => {
   console.log(`Running in ${NODE_ENV} mode on PORT ${PORT}.`)
+  systemLogs.info(`Running in ${NODE_ENV} mode on PORT ${PORT}.`)
 })
