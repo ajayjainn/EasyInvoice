@@ -13,7 +13,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: ${NODE_ENV  }
+      NODE_ENV: ${NODE_ENV}
       MONGO_URI: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb
     networks:
       - invoice
