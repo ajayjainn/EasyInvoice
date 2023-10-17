@@ -1,0 +1,6 @@
+# Ignore artifacts:
+build
+mongo.js
+node_modules
+.eslintrc.js
+.prettierrc.json

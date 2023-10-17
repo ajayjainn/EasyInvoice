@@ -1,0 +1,44 @@
+{
+  "name": "easy-invoice",
+  "version": "1.0.0",
+  "description": "An invoicing web-app built with the MERN Stack.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev":"nodemon backend/server.js"
+  },
+  "keywords": [
+    "invoice",
+    "MERN",
+    "ReduxToolkit"
+  ],
+  "author": "Ajay",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "chalk": "^5.3.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "eslint-config-prettier": "^9.0.0",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^7.1.1",
+    "handlebars": "^4.7.8",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.6.3",
+    "morgan": "^1.10.0",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.51.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "nodemon": "^3.0.1",
+    "prettier": "3.0.3"
+  }
+}
