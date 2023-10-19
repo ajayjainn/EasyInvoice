@@ -1,7 +1,6 @@
 ARG NODE_VERSION=18-alpine
 
 FROM node:${NODE_VERSION}
-
 LABEL name="easy-invoice"
 LABEL license="MIT"
 LABEL description="Easy Invoice app build with MERN stack"
