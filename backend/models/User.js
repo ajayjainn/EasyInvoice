@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import validator from 'validator'
 
 import bcrypt from 'bcrypt'
+import { USER } from '../constants'
 
 const schema = new mongoose.Schema({
   username: {
@@ -77,7 +78,7 @@ const schema = new mongoose.Schema({
 
   roles: {
     type: [String],
-    default: ['User'],
+    default: [USER],
   },
 
 })
