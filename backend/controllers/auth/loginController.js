@@ -44,7 +44,13 @@ const loginUser = asyncHandler(async (req, res) => {
   )
 
   const cookies = req.cookies
-  console.log(cookies)
+
+  const options = {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: 'None',
+  }
+
   let newRefreshTokenArray = !cookies?.jwt
     ? existingUser.refreshToken
     : existingUser.refreshToken.filter((ref) => ref !== cookies.jwt)
@@ -57,22 +63,10 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!existingRefreshToken) {
       newRefreshTokenArray = []
     }
-
-    const options = {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'None',
-    }
     res.clearCookie('jwt', options)
   }
   existingUser.refreshToken = [...newRefreshTokenArray, newRefreshToken]
   await existingUser.save()
-
-  const options = {
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
-    sameSite: 'None',
-  }
 
   res.cookie('jwt', newRefreshToken, options)
 
