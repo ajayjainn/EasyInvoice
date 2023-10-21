@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url'
 import transporter from '../helpers/emailTransport.js'
 import { systemLogs } from './logger.js'
 
-// eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const sendEmail = async (email, subject, payload, template) => {
@@ -25,7 +24,7 @@ const sendEmail = async (email, subject, payload, template) => {
   }
 
   try {
-    await transporter.sendEmail(emailOptions)
+    await transporter.sendMail(emailOptions)
   } catch (error) {
     systemLogs.error(`Email not sent ${error}`)
   }

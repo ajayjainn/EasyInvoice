@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import validator from 'validator'
 
 import bcrypt from 'bcrypt'
-import { USER } from '../constants'
+import { USER } from '../constants/index.js'
 
 const schema = new mongoose.Schema({
   username: {
@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
     trim: true,
     validate: {
       validator(value) {
-        return /^[A-z][A-Z0-9-_]{3,23}$/.test(value)
+        return /^[A-z][A-z0-9-_]{3,23}$/.test(value)
       },
       message: 'username must be alphanumeric,without special characters.Hyphens and underscores allowed',
     },
@@ -66,14 +66,14 @@ const schema = new mongoose.Schema({
 
   phoneNumber: {
     type: String,
-    default: '+91987654321',
+    default: '+919876543210',
     validate: [validator.isMobilePhone, 'Provide a valid phone number.'],
   },
 
   password: {
     type: String,
     select: false,
-    validate: [validator.isStrongPassword, 'Password not strong enough.'],
+    minLength: [6, 'Password must be atleast 6 characters long'],
   },
 
   roles: {

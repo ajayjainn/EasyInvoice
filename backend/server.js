@@ -7,7 +7,7 @@ import mongoSanitize from 'express-mongo-sanitize'
 import connectionToDB from './config/connectDB.js'
 import { morganMiddleware, systemLogs } from './utils/logger.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
-import { checkAuth } from './middleware/checkAuthMiddleware.js'
+import authRouter from './routes/authRoutes.js'
 
 await connectionToDB()
 
@@ -21,7 +21,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
-app.use(mongoSanitize)
+app.use(mongoSanitize())
 
 app.use(morganMiddleware)
 
@@ -29,6 +29,7 @@ app.get('/api/v1/test', (req, res) => {
   res.json({ Hi: 'Welcome to Invoice App' })
 })
 
+app.use('/api/v1/auth', authRouter)
 
 app.use(notFound)
 app.use(errorHandler)

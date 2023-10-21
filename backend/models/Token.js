@@ -4,7 +4,7 @@ const schema = mongoose.Schema({
   _userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: ['User'],
+    ref: 'User',
   },
 
   token: {
