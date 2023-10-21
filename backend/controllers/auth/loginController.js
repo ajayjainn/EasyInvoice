@@ -12,7 +12,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const existingUser = await User.findOne({ email }).select('+password')
   if (!existingUser || !(await existingUser.comparePassword(password))) {
     res.status(401)
-    systemLogs.error(`Incorrect email or password${await existingUser.comparePassword(password)})}`)
+    systemLogs.error('Incorrect email or password')
     throw new Error('Incorrect email or password')
   }
 
