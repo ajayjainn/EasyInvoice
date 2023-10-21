@@ -84,12 +84,17 @@ const schema = new mongoose.Schema({
 })
 
 // Hash the password before saving
-schema.pre('save', function hash() {
-  if (this.isModified('password')) {
-    this.password = bcrypt.hash(this.password, 10)
+schema.pre('save', async function hash(next) {
+  if (!this.isModified('password')) {
+    next()
   }
+  this.password = await bcrypt.hash(this.password, 10)
+  next()
 })
 
-schema.methods.comparePassword = (givenPassword) => bcrypt.compare(givenPassword, this.password)
+schema.methods.comparePassword = async function checkpwd(givenPassword) {
+  const res = await bcrypt.compare(givenPassword, this.password)
+  return res
+}
 
 export default mongoose.model('User', schema)
