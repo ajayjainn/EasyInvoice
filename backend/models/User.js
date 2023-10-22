@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import mongoose from 'mongoose'
 import validator from 'validator'
 
@@ -96,5 +97,14 @@ schema.methods.comparePassword = async function checkpwd(givenPassword) {
   const res = await bcrypt.compare(givenPassword, this.password)
   return res
 }
+
+schema.set('toJSON', {
+  transform(_, ret) {
+    delete ret._id
+    delete ret.__v
+    delete ret.refreshToken
+  },
+
+})
 
 export default mongoose.model('User', schema)

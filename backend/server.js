@@ -8,6 +8,8 @@ import connectionToDB from './config/connectDB.js'
 import { morganMiddleware, systemLogs } from './utils/logger.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import authRouter from './routes/authRoutes.js'
+import userRouter from './routes/userRoutes.js'
+import { apiLimiter } from './middleware/apiLimiterMidllerware.js'
 
 await connectionToDB()
 
@@ -30,6 +32,7 @@ app.get('/api/v1/test', (req, res) => {
 })
 
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/user', apiLimiter, userRouter)
 
 app.use(notFound)
 app.use(errorHandler)
