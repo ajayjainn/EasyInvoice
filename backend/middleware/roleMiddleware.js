@@ -8,7 +8,7 @@ const ROLES = {
 const checkRole = (...allowedRoles) => (req, res, next) => {
   if (!req?.user || !req.roles) {
     res.status(401)
-    throw new Error('you are not authorized to use our platform. ')
+    throw new Error('You do not have permissions to view this page.')
   }
 
   const rolesArray = [...allowedRoles]
@@ -17,9 +17,9 @@ const checkRole = (...allowedRoles) => (req, res, next) => {
     .find((value) => value === true)
   if (!roleFound) {
     res.status(401)
-    throw new Error('you are not authorized to use our platform. ')
+    throw new Error('You do not have permissions to view this page.')
   }
   next()
 }
 
-export default [ROLES, checkRole]
+export default { ROLES, checkRole }

@@ -82,7 +82,7 @@ const schema = new mongoose.Schema({
     default: [USER],
   },
 
-})
+}, { timestamps: true })
 
 // Hash the password before saving
 schema.pre('save', async function hash(next) {

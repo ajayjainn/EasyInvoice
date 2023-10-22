@@ -15,7 +15,7 @@ const checkAuth = asyncHandler(async (req, res, next) => {
     async (err, decoded) => {
       if (err) return res.sendStatus(403)
       req.user = await User.findById(decoded.id).select('-password')
-      req.roles = decoded.roles
+      req.roles = req.user.roles
       return next()
     },
   )
