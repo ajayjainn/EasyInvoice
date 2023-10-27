@@ -34,7 +34,7 @@ const HomePage = () => {
 								align="center"
 								sx={{ textTransform: "uppercase", mt: "13rem" }}
 							>
-								MERN Invoice
+								EASY Invoice
 							</StyledTypography>
 
 							<Typography
