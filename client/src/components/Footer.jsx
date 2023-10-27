@@ -44,7 +44,6 @@ const Footer = () => {
         </Typography>
         <Copyright/>
       </Box>
-      <div>Footer</div>
     </Box>
   );
 };
