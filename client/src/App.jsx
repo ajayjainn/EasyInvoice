@@ -9,8 +9,10 @@ import Layout from "./components/Layout.jsx";
 import NotFound from "./components/NotFound.jsx";
 import { customTheme } from "./customTheme.js";
 
-import useTitle from "./hooks/useTitle";
-import HomePage from "./pages/HomePage";
+import useTitle from "./hooks/useTitle.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import RegisterPage from './features/auth/pages/RegisterPage';
+import VerifiedPage from "./features/auth/pages/VerifiedPage.jsx";
 
 function App() {
   useTitle("Easy Invoice - Home");
@@ -21,6 +23,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/auth/verified" element={<VerifiedPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

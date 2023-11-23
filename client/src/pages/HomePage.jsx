@@ -28,7 +28,6 @@ const HomePage = () => {
 				<Grid>
 					<Grid item md={12} lg={12} sm={6}>
 						<Box sx={{ display: "flex", flexDirection: "column" }}>
-							sdj
 							<StyledTypography
 								variant="h1"
 								align="center"
