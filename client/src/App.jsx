@@ -13,6 +13,7 @@ import useTitle from "./hooks/useTitle.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import RegisterPage from './features/auth/pages/RegisterPage';
 import VerifiedPage from "./features/auth/pages/VerifiedPage.jsx";
+import LoginPage from "./features/auth/pages/LoginPage.jsx";
 
 function App() {
   useTitle("Easy Invoice - Home");
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/verified" element={<VerifiedPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>

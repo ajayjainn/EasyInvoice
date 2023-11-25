@@ -7,16 +7,18 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
-import { FaUserCheck } from "react-icons/fa";
+import { FaSignInAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import GoogleLogin from "../../../components/GoogleLogin";
 import StyledDivider from "../../../components/StyledDivider";
 import AuthWrapper from "../forms/AuthWrapper";
 import RegisterForm from "../forms/RegisterForm";
 import useTitle from "../../../hooks/useTitle";
+import LoginForm from "../forms/LoginForm";
+import { Link as RouterLink } from "react-router-dom";
 
-const RegisterPage = () => {
-  useTitle("Sign Up - MERN Invoice")
+const LoginPage = () => {
+  useTitle("Log In - MERN Invoice");
   return (
     <AuthWrapper>
       <Container
@@ -38,13 +40,13 @@ const RegisterPage = () => {
                 alignItems: "center",
               }}
             >
-              <FaUserCheck className="auth-svg" />
-              <Typography variant="h1">Sign Up</Typography>
+              <FaSignInAlt className="auth-svg" />
+              <Typography variant="h1"> Log In</Typography>
             </Box>
             <StyledDivider />
           </Grid>
           {/* registration form */}
-          <RegisterForm />
+          <LoginForm />
 
           {/* already have an account link */}
           <Box
@@ -63,17 +65,17 @@ const RegisterPage = () => {
             <Button startIcon={<LockOpenIcon />} endIcon={<LockOpenIcon />}>
               <Typography
                 component={Link}
-                to="/login"
+                to="/register"
                 variant="h6"
                 sx={{ textDecoration: "none" }}
                 color="primary"
                 replace
               >
-                Already have an account?
+                Do not have an Account?
               </Typography>
             </Button>
           </Box>
-          {/* or sign up with google */}
+          {/* or sign in with google */}
           <Grid item xs={12}>
             <Box sx={{ alignItems: "center", display: "flex" }}>
               <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
@@ -92,7 +94,7 @@ const RegisterPage = () => {
                 disableRipple
                 disabled
               >
-                OR SIGN UP WITH GOOGLE
+                OR SIGN IN WITH GOOGLE
               </Button>
               <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
             </Box>
@@ -105,11 +107,34 @@ const RegisterPage = () => {
             >
               <GoogleLogin />
             </Box>
+            <Divider sx={{ flexGrow: 1, mb: 1, mt: 1 }} />
+
+            <Box
+              sx={{
+                justifyContent:"center",
+                display:"flex",
+                alignItems:"center",
+                mb: 1,
+                mt:1
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography
+                  component={RouterLink}
+                  to="/reset_password"
+                  variant="h6"
+                  sx={{ textDecoration: "none" }}
+                  color="primary"
+                >
+                  Resend Email Verification Link
+                </Typography>
+              </Grid>
+            </Box>
           </Grid>
         </Grid>
       </Container>
     </AuthWrapper>
-  )
-}
+  );
+};
 
-export default RegisterPage;
+export default LoginPage;

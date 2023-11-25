@@ -78,7 +78,6 @@ const RegisterForm = () => {
 					username: "",
 					password: "",
 					passwordConfirm: "",
-					submit: null,
 				}}
 				validationSchema={Yup.object().shape({
 					firstName: Yup.string()

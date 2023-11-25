@@ -10,10 +10,10 @@ export const extendedApiSlice = baseApiSlice.injectEndpoints({
       })
     }),
     loginUser: builder.mutation({
-      query: userData=>({
+      query: cred=>({
         url:'/auth/login',
         method: 'POST',
-        body:userData,
+        body:cred,
       })
     }),
   })
