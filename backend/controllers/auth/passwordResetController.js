@@ -28,7 +28,7 @@ export const resetPasswordRequest = asyncHandler(async (req, res) => {
     token: randomBytes(32).toString('hex'),
   }).save()
 
-  const link = `${domainUrl}/api/v1/auth/reset_password/?emailToken=${token.token}&userId=${user._id.toString()}`
+  const link = `${domainUrl}/auth/reset_password/?emailToken=${token.token}&userId=${user._id.toString()}`
 
   const payload = {
     name: user.firstName,

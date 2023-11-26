@@ -4,13 +4,12 @@ import { selectCurrentUserToken } from "../features/auth/authSlice";
 
 const useAuthUser = () => {
   const token = useSelector(selectCurrentUserToken)
-  let isAdmin = false
+  const decodedToken = decodeToken(token)
   
-  if(token){
-    const decodedToken = decodeToken(token)
-    isAdmin = decodedToken.roles.includes('Admin')
+  return {
+    roles: decodedToken.roles,
+    isAdmin: decodedToken.roles.includes('Admin')
   }
-  return {isAdmin}
 } 
 
 export default useAuthUser;

@@ -188,7 +188,7 @@ const LoginForm = () => {
                 <Grid item xs={12}>
                   <Typography
                     component={RouterLink}
-                    to="/reset_password"
+                    to="/reset_password_request"
                     variant="subtitle2"
                     sx={{ textDecoration: "none" }}
                     color="primary"
