@@ -14,19 +14,25 @@ import HomePage from "./pages/HomePage.jsx";
 import RegisterPage from './features/auth/pages/RegisterPage';
 import VerifiedPage from "./features/auth/pages/VerifiedPage.jsx";
 import LoginPage from "./features/auth/pages/LoginPage.jsx";
+import Navbar from './components/navbar/index.jsx'
+import { useSelector } from "react-redux";
+import ResendEmailTokenPage from "./features/auth/pages/ResendEmailToken.jsx";
 
 function App() {
   useTitle("Easy Invoice - Home");
+  const {user} = useSelector((state=>state.auth))
   return (
     <>
       <ThemeProvider theme={customTheme}>
         <CssBaseline /> 
+        {user && <Navbar/>  }
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/auth/verified" element={<VerifiedPage />} />
+            <Route path="/resend_token" element={<ResendEmailTokenPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

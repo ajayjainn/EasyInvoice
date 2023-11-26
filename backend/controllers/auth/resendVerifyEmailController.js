@@ -48,7 +48,7 @@ export default asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    message: `A new user, ${user.firstName} has been registered! 
+    message: `
     Verification email has been sent to ${user.email}.
     Link valid for the next 15 minutes. 
     `,

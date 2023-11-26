@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import GoogleLogin from "../../../components/GoogleLogin";
 import StyledDivider from "../../../components/StyledDivider";
 import AuthWrapper from "../forms/AuthWrapper";
-import RegisterForm from "../forms/RegisterForm";
 import useTitle from "../../../hooks/useTitle";
 import LoginForm from "../forms/LoginForm";
 import { Link as RouterLink } from "react-router-dom";
@@ -121,7 +120,7 @@ const LoginPage = () => {
               <Grid item xs={12}>
                 <Typography
                   component={RouterLink}
-                  to="/reset_password"
+                  to="/resend_token"
                   variant="h6"
                   sx={{ textDecoration: "none" }}
                   color="primary"

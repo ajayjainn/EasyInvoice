@@ -34,7 +34,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
       payload,
       '/template/welcome.hbs',
     )
-    res.redirect('/auth/verify')
+    res.redirect('/auth/verified')
   }
 })
 
