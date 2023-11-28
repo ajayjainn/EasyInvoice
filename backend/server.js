@@ -1,4 +1,4 @@
-// import chalk from 'chalk'
+import passport from 'passport'
 import cookieParser from 'cookie-parser'
 import 'dotenv/config'
 import express from 'express'
@@ -10,6 +10,7 @@ import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import authRouter from './routes/authRoutes.js'
 import userRouter from './routes/userRoutes.js'
 import { apiLimiter } from './middleware/apiLimiterMidllerware.js'
+import googleAuth from './config/passportSetup.js'
 
 await connectionToDB()
 
@@ -21,6 +22,10 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+app.use(passport.initialize())
+googleAuth()
+
 app.use(cookieParser())
 
 app.use(mongoSanitize())

@@ -47,7 +47,7 @@ function App() {
             </Route>
 
             <Route element={<AuthRequired allowedRoles={[Roles.Admin]}/>}>
-              <Route path="/userlist" element={<UserListPage/>} />
+              <Route path="/users" element={<UserListPage/>} />
             </Route>
             
             <Route path="*" element={<NotFound />} />

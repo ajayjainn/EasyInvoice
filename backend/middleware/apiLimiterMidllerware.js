@@ -15,6 +15,7 @@ export const apiLimiter = rateLimit({
     ${req.headers.origin}`)
     return res.status(options.statusCode).send(options.message)
   },
+  validate: {trustProxy: false},
   standardHeaders: true,
   legacyHeaders: false,
 })

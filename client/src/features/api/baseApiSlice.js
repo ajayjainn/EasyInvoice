@@ -6,9 +6,10 @@ const baseQuery = fetchBaseQuery({
   baseUrl: '/api/v1',
   creadentials: 'include',
   prepareHeaders: (headers, {getState}) => { 
-    const token = getState().auth.user?.token
+    const token = getState().auth.user?.accessToken
+    const googleToken = getState().auth.googleToken
     if(token){
-      headers.set('authorization',`Bearer ${token}`)
+      headers.set('authorization',`Bearer ${token?token:googleToken}`)
     }
     return headers
   }

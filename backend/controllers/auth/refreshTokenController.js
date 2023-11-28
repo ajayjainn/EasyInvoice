@@ -10,6 +10,7 @@ const newAccessToken = asyncHandler(async (req, res) => {
   const refreshToken = cookies.jwt
   const options = {
     httpOnly: true,
+    secure: true,
     maxAge: 24 * 60 * 60 * 1000,
     sameSite: 'None',
   }
