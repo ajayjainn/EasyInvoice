@@ -17,7 +17,7 @@ const invoiceSchema = new mongoose.Schema({
   dueDate: Date,
   status: {
     type: String,
-    default: 'PENDING',
+    default: 'NOT PAID',
     enum: ['NOT PAID', 'PAID', 'PARTIALLY PAID'],
   },
   subTotal: Number,
@@ -45,6 +45,7 @@ const invoiceSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 invoiceSchema.set('toJSON', {
+  virtuals: true,
   transform(_, ret) {
     delete ret._id
     delete ret.__v

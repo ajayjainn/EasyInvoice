@@ -7,9 +7,10 @@ import mongoSanitize from 'express-mongo-sanitize'
 import connectionToDB from './config/connectDB.js'
 import { morganMiddleware, systemLogs } from './utils/logger.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
-import authRouter from './routes/authRoutes.js'
-import customerRouter from './routes/customerRoutes.js'
-import userRouter from './routes/userRoutes.js'
+import authRoutes from './routes/authRoutes.js'
+import customerRoutes from './routes/customerRoutes.js'
+import invoiceRoutes from './routes/invoiceRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 import { apiLimiter } from './middleware/apiLimiterMidllerware.js'
 import googleAuth from './config/passportSetup.js'
 
@@ -37,9 +38,10 @@ app.get('/api/v1/test', (req, res) => {
   res.json({ Hi: 'Welcome to Invoice App' })
 })
 
-app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/user', apiLimiter, userRouter)
-app.use('/api/v1/customers', apiLimiter, customerRouter)
+app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/user', apiLimiter, userRoutes)
+app.use('/api/v1/customers', apiLimiter, customerRoutes)
+app.use('/api/v1/invoices', apiLimiter, invoiceRoutes)
 
 app.use(errorHandler)
 app.use(notFound)
