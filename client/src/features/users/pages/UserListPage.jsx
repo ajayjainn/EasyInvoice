@@ -9,12 +9,14 @@ import Paper from "@mui/material/Paper";
 import TablePaginationActions from "../../../components/TablePaginationActions";
 import React, { useEffect } from "react";
 import { Badge, Box, Checkbox, Container, CssBaseline, TableHead, Typography, styled } from "@mui/material";
-import { useGetAllUsersQuery } from "../usersApiSlice";
+import { useActivateUserMutation, useDeleteUserMutation, useGetAllUsersQuery } from "../usersApiSlice";
 import ClearIcon from "@mui/icons-material/Clear";
 import { MdOutlineBadge } from "react-icons/md";
 import Spinner from "../../../components/Spinner";
 import StyledDivider from "../../../components/StyledDivider";
 import GroupIcon from "@mui/icons-material/Group";
+import { useDeactivateUserMutation } from "../usersApiSlice";
+import { toast } from "react-toastify";
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -37,6 +39,10 @@ const UserListPage = () => {
     limit: rowsPerPage,
   });
 
+  const [deactivateUser] = useDeactivateUserMutation()
+  const [activateUser] = useActivateUserMutation()
+  const [deleteUser] = useDeleteUserMutation()
+
   useEffect(() => {
     if (isSuccess) {
       setRows(data?.users || []);
@@ -55,6 +61,28 @@ const UserListPage = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const handleDeactivate = async (e,id) => {
+    try{
+      let result={}
+      if(!e.target.checked){
+        result = await deactivateUser(id).unwrap()
+      }else{
+        result = await activateUser(id).unwrap()
+      }
+      toast.success(result.message)
+    }catch(err){
+      toast.error(error)
+    }
+  }
+  const handleDelete = async (id) => {
+    try{
+      const result = await deleteUser(id).unwrap()
+      toast.success(result.message)
+    }catch(err){
+      toast.error(err)
+    }
+  }
 
   return (
     <Container component="main" maxWidth="lg" sx={{ mt: 10,mb:20 }}>
@@ -124,16 +152,19 @@ const UserListPage = () => {
                 </TableCell>
 
                 <TableCell style={{ width: 160 }} align="right">
+                  {/* deactivate user account */}
                   <Box>
-                    <Checkbox />
+                    <Checkbox checked={row.active} onClick={(e)=>handleDeactivate(e,row.id)}/>
                   </Box>
                 </TableCell>
 
                 <TableCell style={{ width: 160 }} align="right">
+                  {/* delete user account */}
                   <ClearIcon
                     sx={{ cursor: "pointer" }}
                     color="error"
                     fontSize="medium"
+                    onClick={()=>handleDelete(row.id)}
                   />
                 </TableCell>
               </TableRow>

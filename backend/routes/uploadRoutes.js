@@ -8,7 +8,7 @@ router.patch('/', upload.single('logo'), async (req, res) => {
   const localFilePath = req.file.path
   console.log(req.file)
   const result = await cloudinaryUploader(localFilePath)
-  res.send(result.url)
+  res.json(result.url)
 })
 
 export default router

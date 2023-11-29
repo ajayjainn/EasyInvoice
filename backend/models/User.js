@@ -67,7 +67,6 @@ const schema = new mongoose.Schema({
 
   phoneNumber: {
     type: String,
-    default: '+919876543210',
     validate: [validator.isMobilePhone, 'Provide a valid phone number.'],
   },
 
@@ -99,6 +98,7 @@ schema.methods.comparePassword = async function checkpwd(givenPassword) {
 }
 
 schema.set('toJSON', {
+  virtuals: true,
   transform(_, ret) {
     delete ret._id
     delete ret.__v

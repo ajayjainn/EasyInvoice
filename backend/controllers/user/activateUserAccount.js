@@ -1,16 +1,16 @@
 import asyncHandler from 'express-async-handler'
 import User from '../../models/User.js'
 
-const deactivateUserAccount = asyncHandler(async (req, res) => {
+const activateUserAccount = asyncHandler(async (req, res) => {
   const userId = req.params.id
   const user = await User.findById(userId)
   if (user) {
-    user.active = false
+    user.active = true
     const updatedUser = await user.save()
 
     return res.json({
       success: true,
-      message: `${user.firstName}'s account deactivated successfully.`,
+      message: `${user.firstName}'s account activated successfully.`,
       updatedUser,
     })
   }
@@ -18,4 +18,4 @@ const deactivateUserAccount = asyncHandler(async (req, res) => {
   throw new Error('User not found')
 })
 
-export default deactivateUserAccount
+export default activateUserAccount

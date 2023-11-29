@@ -23,6 +23,8 @@ import Dashboard from './pages/DashboardPage.jsx'
 import UserListPage from "./features/users/pages/UserListPage.jsx";
 import AuthRequired from './components/AuthRequired.jsx'
 import Roles from '../src/config/roles.js'
+import ProfilePage from "./features/users/pages/ProfilePage.jsx";
+import EditProfilePage from "./features/users/pages/EditProfilePage.jsx";
 
 function App() {
   useTitle("Easy Invoice - Home");
@@ -44,6 +46,8 @@ function App() {
 
             <Route element={<AuthRequired allowedRoles={[Roles.User]}/>}>
               <Route path="/dashboard" element={<Dashboard/>} />
+              <Route path="/profile" element={<ProfilePage/>} />
+              <Route path="/profile/edit" element={<EditProfilePage/>} />
             </Route>
 
             <Route element={<AuthRequired allowedRoles={[Roles.Admin]}/>}>

@@ -1,5 +1,7 @@
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
+
 import 'dotenv/config'
 import path from 'path'
 import express from 'express'
@@ -19,6 +21,7 @@ import googleAuth from './config/passportSetup.js'
 await connectionToDB()
 
 const app = express()
+app.use(cors())
 
 const __dirname = path.resolve()
 
