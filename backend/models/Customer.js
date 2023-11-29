@@ -16,6 +16,7 @@ const schema = new mongoose.Schema({
     lowercase: true,
     trim: true,
     unique: true,
+    required: true,
     validate: [validator.isEmail, 'Please provide a valid email.'],
   },
 

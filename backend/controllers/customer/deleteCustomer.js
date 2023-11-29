@@ -14,7 +14,10 @@ const deleteCustomer = expressAsyncHandler(async (req, res) => {
   }
 
   await Customer.findByIdAndDelete(customer.id)
-  res.status(204).end()
+  res.json({
+    success: true,
+    message: 'Customer Deleted Successfully!',
+  })
 })
 
 export default deleteCustomer

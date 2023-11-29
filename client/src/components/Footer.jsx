@@ -19,6 +19,7 @@ const Footer = () => {
         bottom: "0",
         width: "100%",
       }}
+      className='footer'
     >
       <CssBaseline />
       <Box

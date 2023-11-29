@@ -7,17 +7,16 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePaginationActions from "../../../components/TablePaginationActions";
-import React, { useEffect } from "react";
-import { Badge, Box, Checkbox, Container, CssBaseline, TableHead, Typography, styled } from "@mui/material";
-import { useActivateUserMutation, useDeleteUserMutation, useGetAllUsersQuery } from "../usersApiSlice";
-import ClearIcon from "@mui/icons-material/Clear";
-import { MdOutlineBadge } from "react-icons/md";
+import { Badge, Box, Button, Container, CssBaseline, Stack, TableHead, Typography, styled } from "@mui/material";
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import { MdOutlineBadge, MdPersonAddAlt1 } from "react-icons/md";
 import Spinner from "../../../components/Spinner";
 import StyledDivider from "../../../components/StyledDivider";
 import GroupIcon from "@mui/icons-material/Group";
-import { useDeactivateUserMutation } from "../usersApiSlice";
 import { toast } from "react-toastify";
-
+import { useDeleteCustomerMutation, useGetAllCustomersQuery } from "../customersApiSlice";
+import { useNavigate} from 'react-router-dom'
+import { useState } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -29,26 +28,19 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const UserListPage = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [rows, setRows] = React.useState([]);
+const CustomersListPage = () => {
+  const navigate = useNavigate()
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const { data, isLoading, isSuccess, error } = useGetAllUsersQuery({
+
+  const { data, isLoading} = useGetAllCustomersQuery({
     page: page + 1,
     limit: rowsPerPage,
   });
+  const [deleteCustomer] = useDeleteCustomerMutation()
 
-  const [deactivateUser] = useDeactivateUserMutation()
-  const [activateUser] = useActivateUserMutation()
-  const [deleteUser] = useDeleteUserMutation()
-
-  useEffect(() => {
-    if (isSuccess) {
-      setRows(data?.users || []);
-    }
-  }, [data, isSuccess]);
-
+  const rows = data?.customers || []
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.count) : 0;
@@ -62,22 +54,9 @@ const UserListPage = () => {
     setPage(0);
   };
 
-  const handleDeactivate = async (e,id) => {
-    try{
-      let result={}
-      if(!e.target.checked){
-        result = await deactivateUser(id).unwrap()
-      }else{
-        result = await activateUser(id).unwrap()
-      }
-      toast.success(result.message)
-    }catch(err){
-      toast.error(error)
-    }
-  }
   const handleDelete = async (id) => {
     try{
-      const result = await deleteUser(id).unwrap()
+      const result = await deleteCustomer(id).unwrap()
       toast.success(result.message)
     }catch(err){
       toast.error(err)
@@ -100,67 +79,69 @@ const UserListPage = () => {
         <Typography variant="h1"> Users</Typography>
       </Box>
       <StyledDivider />
-      <Box
+      <Stack
 				sx={{
 					display: "flex",
 					flexDirection: "row",
+          justifyContent: 'space-between'
 				}}
 			>
+        <Stack direction="row">
+
 				<Typography variant="h4"> Total: </Typography>
 				<Badge
-					badgeContent={data?.count}
+					badgeContent={data?.count || 0}
 					color="primary"
 					sx={{ marginTop: "3px", marginLeft: "5px" }}
 				>
 					<GroupIcon color="action" fontSize="large" />
 				</Badge>
-			</Box>
+        </Stack>
+
+        <Button className="new-customer-btn" variant="contained" color='primary'
+        startIcon={<MdPersonAddAlt1/>} onClick={()=>navigate('/customers/new')}
+        >
+          New Customer
+        </Button>
+
+			</Stack>
+
+
       {isLoading ? (
 				<Spinner />
 			) : (
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+        <Table sx={{ minWidth: 300 }} aria-label="custom pagination table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Email</StyledTableCell>
-              <StyledTableCell align="right">Username</StyledTableCell>
-              <StyledTableCell align="right">Provider</StyledTableCell>
-              <StyledTableCell align="right">Is Email Verifi</StyledTableCell>
-              <StyledTableCell align="right">Roles</StyledTableCell>
-              <StyledTableCell align="right">Active</StyledTableCell>
-              <StyledTableCell align="right">Delete</StyledTableCell>
+              <StyledTableCell align="center">Name</StyledTableCell>
+              <StyledTableCell align="center">Email</StyledTableCell>
+              <StyledTableCell align="center">Address</StyledTableCell>
+              <StyledTableCell align="center">Account Number</StyledTableCell>
+              <StyledTableCell align="center">Delete</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
+                <TableCell style={{ width: 160 }} align="center">
+                  {row.name}
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="center">
                   {row.email}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
-                  {row.username}
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
-                  {row.provider}
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
-                  {row.isEmailVerified.toString()}
+
+                <TableCell style={{ width: 160 }} align="center">
+                  {row.address}
                 </TableCell>
 
-                <TableCell style={{ width: 160 }} align="right">
-                  {row.roles.join(", ")}
+                <TableCell style={{ width: 160 }} align="center">
+                  {row.accountNo}
                 </TableCell>
 
-                <TableCell style={{ width: 160 }} align="right">
-                  {/* deactivate user account */}
-                  <Box>
-                    <Checkbox checked={row.active} onClick={(e)=>handleDeactivate(e,row.id)}/>
-                  </Box>
-                </TableCell>
-
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} align="center">
                   {/* delete user account */}
-                  <ClearIcon
+                  <PersonRemoveIcon
                     sx={{ cursor: "pointer" }}
                     color="error"
                     fontSize="medium"
@@ -171,7 +152,7 @@ const UserListPage = () => {
             ))}
             {emptyRows > 0 && (
               <TableRow style={{ height: 75 * emptyRows }}>
-                <TableCell colSpan={7} />
+                <TableCell colSpan={5} />
               </TableRow>
             )}
           </TableBody>
@@ -179,7 +160,7 @@ const UserListPage = () => {
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={7}
+                colSpan={5}
                 count={data?.count || 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
@@ -201,4 +182,4 @@ const UserListPage = () => {
   );
 };
 
-export default UserListPage;
+export default CustomersListPage;
