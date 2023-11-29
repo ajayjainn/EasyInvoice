@@ -8,6 +8,7 @@ import connectionToDB from './config/connectDB.js'
 import { morganMiddleware, systemLogs } from './utils/logger.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import authRouter from './routes/authRoutes.js'
+import customerRouter from './routes/customerRoutes.js'
 import userRouter from './routes/userRoutes.js'
 import { apiLimiter } from './middleware/apiLimiterMidllerware.js'
 import googleAuth from './config/passportSetup.js'
@@ -38,9 +39,10 @@ app.get('/api/v1/test', (req, res) => {
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/user', apiLimiter, userRouter)
+app.use('/api/v1/customers', apiLimiter, customerRouter)
 
-app.use(notFound)
 app.use(errorHandler)
+app.use(notFound)
 
 const PORT = process.env.PORT || 1997
 const NODE_ENV = process.env.NODE_ENV || 'development'
