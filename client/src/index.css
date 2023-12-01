@@ -7,9 +7,19 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	min-height: 100vh;
 }
+@page {
+  size: A4;
+  margin: 0;
+}
+@media print {
+  html, body {
+    width: 210mm;
+    height: 297mm;
+  }
+  /* ... the rest of the rules ... */
+}
 
 .footer {
-	position: fixed;
 	width: 100%;
 	bottom: 0;
 }

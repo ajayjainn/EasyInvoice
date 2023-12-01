@@ -67,7 +67,7 @@ const MenuList = () => {
 
 			<StyledList>
 				<ListItem disablePadding>
-					<ListItemButton onClick={() => navigate("/documents")}>
+					<ListItemButton onClick={() => navigate("/invoices")}>
 						<ListItemIcon>
 							<PointOfSaleIcon
 								sx={{ fontSize: 40 }}

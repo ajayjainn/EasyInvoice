@@ -27,7 +27,7 @@ import {
 
 const EditProfilePage = () => {
 
-  useTitle("Edit Profile - MERN Invoice");
+  useTitle("Edit Profile - EASY Invoice");
   const navigate = useNavigate();
 	const goBack = () => navigate(-1);
 

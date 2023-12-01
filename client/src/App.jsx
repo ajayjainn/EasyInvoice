@@ -27,6 +27,9 @@ import ProfilePage from "./features/users/pages/ProfilePage.jsx";
 import EditProfilePage from "./features/users/pages/EditProfilePage.jsx";
 import CustomersListPage from "./features/customers/pages/CustomersListPage.jsx";
 import NewCustomerPage from "./features/customers/pages/NewCustomerPage.jsx";
+import InvoicePage from "./features/invoices/pages/InvoicePage.jsx";
+import InvoiceCreateEditPage from "./features/invoices/pages/InvoiceCreateEditForm.jsx";
+
 
 function App() {
   useTitle("Easy Invoice - Home");
@@ -52,6 +55,9 @@ function App() {
               <Route path="/profile/edit" element={<EditProfilePage/>} />
               <Route path="/customers" element={<CustomersListPage/>} />
               <Route path="/customers/new" element={<NewCustomerPage/>} />
+              <Route path="/invoices" element={<InvoicePage/>} />
+              <Route path="/invoices/new" element={<InvoiceCreateEditPage/>} />
+              <Route path="/invoices/edit/:id" element={<InvoiceCreateEditPage/>} />
             </Route>
 
             <Route element={<AuthRequired allowedRoles={[Roles.Admin]}/>}>

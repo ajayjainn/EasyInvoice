@@ -17,7 +17,7 @@ import LoginForm from "../forms/LoginForm";
 import { Link as RouterLink } from "react-router-dom";
 
 const LoginPage = () => {
-  useTitle("Log In - MERN Invoice");
+  useTitle("Log In - EASY Invoice");
   return (
     <AuthWrapper>
       <Container

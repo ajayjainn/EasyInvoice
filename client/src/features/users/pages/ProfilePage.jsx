@@ -58,7 +58,7 @@ function capitalizeFirstLetter(string) {
 
 const ProfilePage = () => {
 	const navigate = useNavigate();
-	const { data, error, isLoading, isError } = useGetUserProfileQuery();
+	const { data, error, isError } = useGetUserProfileQuery();
 
 	const dispatch = useDispatch();
 
@@ -71,7 +71,6 @@ const ProfilePage = () => {
 
 	const deleteHandler = async (e) => {
 		e.preventDefault();
-
 		try {
 			await deleteMyAccount().unwrap();
 			dispatch(logOut());
@@ -79,15 +78,14 @@ const ProfilePage = () => {
 				"Your account has been deleted. Sad to see you go 😢"
 			);
 		} catch (err) {
-			const message = err.data.message;
+			const message = err.error;
 			toast.error(message);
 		}
 	};
 
 	useEffect(() => {
 		if (isError) {
-			const message = error.data.message;
-			toast.error(message);
+			toast.error(error);
 		}
 	}, [isError, error]);
 
@@ -114,7 +112,7 @@ const ProfilePage = () => {
 				<BadgeIcon sx={{ fontSize: 80 }} />
 				<Typography variant="h1">User Profile</Typography>
 			</Box>
-			{isLoading ? (
+			{!data ? (
 				<Spinner />
 			) : (
 				<Box

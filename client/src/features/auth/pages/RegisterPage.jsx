@@ -16,7 +16,7 @@ import RegisterForm from "../forms/RegisterForm";
 import useTitle from "../../../hooks/useTitle";
 
 const RegisterPage = () => {
-  useTitle("Sign Up - MERN Invoice")
+  useTitle("Sign Up - EASY Invoice")
   return (
     <AuthWrapper>
       <Container
@@ -29,7 +29,7 @@ const RegisterPage = () => {
         }}
       >
         <Grid>
-          <Grid item xs={12}>
+          <Grid marginBottom={3} item xs={12}>
             <Box
               sx={{
                 display: "flex",
@@ -38,8 +38,8 @@ const RegisterPage = () => {
                 alignItems: "center",
               }}
             >
-              <FaUserCheck className="auth-svg" />
-              <Typography variant="h1">Sign Up</Typography>
+              <FaUserCheck size={80} className="auth-svg" />
+              <Typography variant="h2">Sign Up</Typography>
             </Box>
             <StyledDivider />
           </Grid>

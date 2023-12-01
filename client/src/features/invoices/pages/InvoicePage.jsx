@@ -1,40 +1,36 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableFooter from "@mui/material/TableFooter";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+import { Badge, Box, Button, Container, CssBaseline, Stack, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, Typography } from '@mui/material'
+import { useState } from 'react'
+import {useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
+import Spinner from '../../../components/Spinner'
+import StyledTableCell from '../../../components/StyledTableCell'
+import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions'
+import { useDeleteInvoiceMutation, useGetAllInvoicesQuery } from '../invoiceApiSlice'
+import StyledDivider from '../../../components/StyledDivider'
+import { FaFileInvoiceDollar } from "react-icons/fa6";
+import { MdAssignmentAdd } from "react-icons/md";
 import Paper from "@mui/material/Paper";
-import TablePaginationActions from "../../../components/TablePaginationActions";
-import { Badge, Box, Button, Container, CssBaseline, Stack, TableHead, Typography } from "@mui/material";
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { MdOutlineBadge, MdPersonAddAlt1 } from "react-icons/md";
-import Spinner from "../../../components/Spinner";
-import StyledDivider from "../../../components/StyledDivider";
-import GroupIcon from "@mui/icons-material/Group";
-import { toast } from "react-toastify";
-import { useDeleteCustomerMutation, useGetAllCustomersQuery } from "../customersApiSlice";
-import { useNavigate} from 'react-router-dom'
-import { useState } from "react";
-import StyledTableCell from "../../../components/StyledTableCell";
+import { TiDocumentDelete } from "react-icons/ti";
 
-const CustomersListPage = () => {
+
+const InvoicePage = () => {
+
+
   const navigate = useNavigate()
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-
-  const { data, isLoading} = useGetAllCustomersQuery({
+  const {data, isLoading} = useGetAllInvoicesQuery({
     page: page + 1,
     limit: rowsPerPage,
-  });
-  const [deleteCustomer] = useDeleteCustomerMutation()
+  })
+  const [deleteInvoice] = useDeleteInvoiceMutation()
 
-  const rows = data?.customers || []
-  // Avoid a layout jump when reaching the last page with empty rows.
+  const rows = data?.invoices || []
+
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.count) : 0;
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -47,7 +43,7 @@ const CustomersListPage = () => {
 
   const handleDelete = async (id) => {
     try{
-      const result = await deleteCustomer(id).unwrap()
+      const result = await deleteInvoice(id).unwrap()
       toast.success(result.message)
     }catch(err){
       toast.error(err)
@@ -66,8 +62,8 @@ const CustomersListPage = () => {
           alignItems: "center",
         }}
       >
-        <MdOutlineBadge className="auth-svg" />
-        <Typography variant="h1"> Customers </Typography>
+
+        <Typography variant="h1"> Invoices </Typography>
       </Box>
       <StyledDivider />
       <Stack
@@ -85,14 +81,14 @@ const CustomersListPage = () => {
 					color="primary"
 					sx={{ marginTop: "3px", marginLeft: "5px" }}
 				>
-					<GroupIcon color="action" fontSize="large" />
+					<FaFileInvoiceDollar size={40} color="action" fontSize="large" />
 				</Badge>
         </Stack>
 
         <Button className="new-customer-btn" variant="contained" color='primary'
-        startIcon={<MdPersonAddAlt1/>} onClick={()=>navigate('/customers/new')}
+        startIcon={<MdAssignmentAdd/>} onClick={()=>navigate('/invoices/new')}
         >
-          New Customer
+          New Invoice
         </Button>
 
 			</Stack>
@@ -102,40 +98,41 @@ const CustomersListPage = () => {
 				<Spinner />
 			) : (
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 300 }} aria-label="custom pagination table">
-          <TableHead>
+        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+        <TableHead>
             <TableRow>
-              <StyledTableCell align="center">Name</StyledTableCell>
-              <StyledTableCell align="center">Email</StyledTableCell>
-              <StyledTableCell align="center">Address</StyledTableCell>
-              <StyledTableCell align="center">Account Number</StyledTableCell>
-              <StyledTableCell align="center">Delete</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell align="right">Email</StyledTableCell>
+              <StyledTableCell align="right">Status</StyledTableCell>
+              <StyledTableCell align="right">Amount</StyledTableCell>
+              <StyledTableCell align="right">Delete Invoice</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell style={{ width: 160 }} align="center">
-                  {row.name}
+              <TableRow onClick={()=>navigate(`/invoices/edit/${row.id}`)} key={row.id}>
+                <TableCell style={{ width: 160 }} >
+                  {row.customer.name}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="center">
-                  {row.email}
-                </TableCell>
-
-                <TableCell style={{ width: 160 }} align="center">
-                  {row.address}
+                <TableCell style={{ width: 160 }} >
+                  {row.customer.email}
                 </TableCell>
 
-                <TableCell style={{ width: 160 }} align="center">
-                  {row.accountNo}
+                <TableCell style={{ width: 160 }} >
+                  {row.status}
                 </TableCell>
 
-                <TableCell style={{ width: 160 }} align="center">
+                <TableCell style={{ width: 160 }} >
+                  {row.totalAmount}
+                </TableCell>
+
+                <TableCell style={{ width: 160 }} align="left">
                   {/* delete user account */}
-                  <PersonRemoveIcon
+                  <TiDocumentDelete
                     sx={{ cursor: "pointer" }}
                     color="error"
                     fontSize="medium"
+                    size={40}
                     onClick={()=>handleDelete(row.id)}
                   />
                 </TableCell>
@@ -170,7 +167,7 @@ const CustomersListPage = () => {
         </Table>
       </TableContainer>)}
     </Container>
-  );
-};
+  )
+}
 
-export default CustomersListPage;
+export default InvoicePage

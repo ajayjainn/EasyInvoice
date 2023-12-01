@@ -21,7 +21,7 @@ import useTitle from "../../../hooks/useTitle";
 import { useCreateCustomerMutation } from "../customersApiSlice";
 
 const CustomerCreateForm = () => {
-	useTitle("Create Customer - MERN Invoice");
+	useTitle("Create Customer - EASY Invoice");
 
 	const navigate = useNavigate();
 	const location = useLocation();
