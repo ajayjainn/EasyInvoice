@@ -1,15 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {decodeToken} from 'react-jwt'
 
-const user = JSON.parse(localStorage.getItem("user"))
+let user = JSON.parse(localStorage.getItem("user"))
 const googleToken = localStorage.getItem('googleToken')
 
 
-const decodedToken = decodeToken(googleToken)
+if(googleToken && !user){
+  const decodedToken = decodeToken(googleToken)
+  user = decodedToken
+}
 
 
 const initialState = {
-  user:user?user:decodedToken,
+  user:user,
   googleToken:googleToken?googleToken:null,
 }
 

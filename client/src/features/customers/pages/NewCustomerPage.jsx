@@ -44,7 +44,7 @@ const CustomerCreateForm = () => {
 				initialValues={{
 					name: "",
 					email: "",
-					phoneNumber: "",
+					phoneNo: "",
 					address: "",
 				}}
 				validationSchema={Yup.object().shape({
@@ -55,24 +55,19 @@ const CustomerCreateForm = () => {
 						.email("Must be a valid email")
 						.max(255)
 						.required("Email is required"),
-					phoneNumber: Yup.string()
-						.max(20)
-						.required(
-							"Your mobile phone number must begin with a '+', followed by your country code then actual number e.g +918855446699"
-						),
+					phoneNo: Yup
+					.string()
+					// .matches(/^(\+\d{1,3}[- ]?)?\d{10}$/,"Must be a valid mobile phone number with country code.")
+					
 				})}
 				onSubmit={async (values, { setStatus, setSubmitting }) => {
 					try {
 						const response = await createCustomer(values).unwrap();
-            if(!response.success){
-              throw new Error(response.message)
-            }
-            toast.success(response.message)
+						toast.success(response.message)
 						setStatus({ success: true });
 						setSubmitting(false);
 					} catch (err) {
-						const message = err.message;
-						toast.error(message);
+						toast.error(err.data.message);
 						setStatus({ success: false });
 						setSubmitting(false);
 					}
@@ -197,34 +192,34 @@ const CustomerCreateForm = () => {
 															</FormHelperText>
 														)}
 													{/* phone number */}
-													<InputLabel htmlFor="customer-phoneNumber">
+													<InputLabel htmlFor="customer-phoneNo">
 														Mobile Phone Number*
 													</InputLabel>
 													<OutlinedInput
 														fullWidth
 														error={Boolean(
-															touched.phoneNumber &&
-																errors.phoneNumber
+															touched.phoneNo &&
+																errors.phoneNo
 														)}
-														id="customer-phoneNumber"
-														type="phoneNumber"
+														id="customer-phoneNo"
+														type="phoneNo"
 														value={
-															values.phoneNumber
+															values.phoneNo
 														}
-														name="phoneNumber"
+														name="phoneNo"
 														onBlur={handleBlur}
 														onChange={handleChange}
 														placeholder="e.g +919876543210 - must be a valid mobile phone number with country code."
 														inputProps={{}}
 													/>
-													{touched.phoneNumber &&
-														errors.phoneNumber && (
+													{touched.phoneNo &&
+														errors.phoneNo && (
 															<FormHelperText
 																error
-																id="helper-text-customer-phoneNumber"
+																id="helper-text-customer-phoneNo"
 															>
 																{
-																	errors.phoneNumber
+																	errors.phoneNo
 																}
 															</FormHelperText>
 														)}
@@ -277,7 +272,7 @@ const CustomerCreateForm = () => {
 															}
 															disabled={
 																!values.email ||
-																!values.phoneNumber ||
+																!values.phoneNo ||
 																!values.name
 															}
 														>

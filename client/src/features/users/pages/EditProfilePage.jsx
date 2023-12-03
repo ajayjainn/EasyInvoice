@@ -24,6 +24,8 @@ import {
 	TextField,
 	Typography,
 } from "@mui/material";
+import { useDispatch } from 'react-redux';
+import { logIn } from '../../auth/authSlice';
 
 const EditProfilePage = () => {
 
@@ -33,6 +35,7 @@ const EditProfilePage = () => {
 
   
   const [fields,setFields] = useState({})
+	const dispatch = useDispatch()
 
 	const [uploading, setUploading] = useState(false);
   
@@ -40,8 +43,8 @@ const EditProfilePage = () => {
   
   const isValidPhoneNumber = validator.isMobilePhone(fields.phoneNumber?fields.phoneNumber:"");
 
-  const [updateProfile,{data:updatedData,isSuccess}] = useUpdateUserProfileMutation()
-  const [updateAvatar, {data:updatedAvatar}] = useUpdateAvatarMutation()
+  const [updateProfile,{data:updatedData,isSuccess,isLoading:isUpdating}] = useUpdateUserProfileMutation()
+  const [updateAvatar, {data:updatedAvatar,isLoading:isUploading}] = useUpdateAvatarMutation()
 
   useEffect(()=>{
     if(data) setFields(data.user)
@@ -65,6 +68,16 @@ const EditProfilePage = () => {
     e.preventDefault()
     try{
       await updateProfile(fields).unwrap()
+			const us = JSON.parse(localStorage.getItem(('user')))
+			const data = {
+				...us,
+				avatar: fields.avatar,
+				firstName: fields.firstName,
+				lastName: fields.lastName,
+				username: fields.username,
+			}
+			localStorage.setItem('user', JSON.stringify(data))
+			dispatch(logIn(data))
     }catch(err){
       toast.error(err.data.message)
     }
@@ -266,6 +279,7 @@ const EditProfilePage = () => {
 						variant="contained"
 						color="success"
 						size="large"
+						disabled={isUpdating || isUploading}
 						endIcon={<CheckIcon />}
 					>
 						<Typography variant="h5">Update Profile</Typography>

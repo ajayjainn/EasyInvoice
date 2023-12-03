@@ -5,9 +5,9 @@ const updateInvoice = expressAsyncHandler(async (req, res) => {
   const fields = req.body
   const id = req.params.id
 
-  if (fields.user || fields.customer) {
+  if (fields.user) {
     res.status(400)
-    throw new Error('Cannot update user or customer.')
+    throw new Error('Cannot update user.')
   }
 
   const invoice = await Invoice.findById(id)
@@ -23,9 +23,16 @@ const updateInvoice = expressAsyncHandler(async (req, res) => {
 
   const updatedInvoice = await Invoice.findByIdAndUpdate(
     id,
-    { fields },
+    fields,
     { new: true, runValidators: true },
   )
+
+  if (updatedInvoice.totalAmount > updatedInvoice.totalAmountReceived) {
+    updatedInvoice.status = 'PARTIALLY PAID'
+  } else {
+    updatedInvoice.status = 'PAID'
+  }
+  await updatedInvoice.save()
 
   if (updatedInvoice) {
     return res.json({

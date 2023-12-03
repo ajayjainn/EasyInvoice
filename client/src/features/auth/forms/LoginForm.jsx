@@ -105,6 +105,7 @@ const LoginForm = () => {
 											Email Address*
 										</InputLabel>
 										<OutlinedInput
+											autoComplete="email"
 											id="email-signup"
 											value={values.email}
 											name="email"
@@ -134,6 +135,7 @@ const LoginForm = () => {
 											Password
 										</InputLabel>
 										<OutlinedInput
+											autoComplete="current-password"
 											fullWidth
 											error={Boolean(
 												touched.password &&

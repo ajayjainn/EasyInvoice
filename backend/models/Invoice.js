@@ -13,20 +13,25 @@ const invoiceSchema = new mongoose.Schema({
     ref: 'Customer',
     required: true,
   },
-  documentNo: Number,
+  invoiceNo: String,
+  remarks: String,
+  terms: String,
   dueDate: Date,
+  documentNo: String,
   status: {
     type: String,
     default: 'NOT PAID',
     enum: ['NOT PAID', 'PAID', 'PARTIALLY PAID'],
   },
   subTotal: Number,
-  discount: Number,
   tax: Number,
   totalAmount: Number,
-  totalAmountReceived: Number,
+  totalAmountReceived: {
+    type: Number,
+    default: 0,
+  },
 
-  billingItems: [{
+  items: [{
     name: String,
     rate: Number,
     quantity: Number,
@@ -53,7 +58,7 @@ invoiceSchema.set('toJSON', {
 })
 
 invoiceSchema.pre('save', async function accountNo(next) {
-  this.documentNo = `INV-${randomBytes(4).toString('hex')}`
+  this.invoiceNo = `INV-${randomBytes(4).toString('hex')}`
   next()
 })
 

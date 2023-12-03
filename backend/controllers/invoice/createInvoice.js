@@ -20,7 +20,7 @@ const createInvoice = expressAsyncHandler(async (req, res) => {
   const newInvoice = await new Invoice({
     user: req.user._id,
     customer: customer._id,
-    fields,
+    ...fields,
   }).save()
 
   if (newInvoice) {

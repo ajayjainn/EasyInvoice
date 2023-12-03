@@ -2,6 +2,7 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 import { randomBytes } from 'crypto'
+import Invoice from './Invoice.js'
 
 const schema = new mongoose.Schema({
 
@@ -15,7 +16,6 @@ const schema = new mongoose.Schema({
     type: String,
     lowercase: true,
     trim: true,
-    unique: true,
     required: true,
     validate: [validator.isEmail, 'Please provide a valid email.'],
   },
@@ -29,9 +29,9 @@ const schema = new mongoose.Schema({
   address: String,
   accountNo: String,
 
-  phoneNumber: {
+  phoneNo: {
     type: String,
-    validate: [validator.isMobilePhone, 'Provide a valid phone number.'],
+    validate: [/^(\+\d{1,3}[- ]?)?\d{10}$/, 'Provide a valid phone number.'],
   },
 
 }, { timestamps: true, toObject: { virtuals: true } })
@@ -46,6 +46,12 @@ schema.set('toJSON', {
 
 schema.pre('save', async function accountNo(next) {
   this.accountNo = `CUS-${randomBytes(4).toString('hex')}`
+  next()
+})
+
+schema.pre('findOneAndDelete', async function deleteInvoice(next) {
+  const id = await this.model.findOne(this.getQuery()).select('_id')
+  await Invoice.deleteMany({ customer: id }).exec()
   next()
 })
 

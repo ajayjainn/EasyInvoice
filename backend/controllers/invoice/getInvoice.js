@@ -3,6 +3,10 @@ import Invoice from '../../models/Invoice.js'
 
 const getInvoice = expressAsyncHandler(async (req, res) => {
   const id = req.params.id
+  if (!id) {
+    res.status(404)
+    throw new Error('No id provided.')
+  }
 
   const invoice = await Invoice.findById(id)
     .populate('customer', 'name email')

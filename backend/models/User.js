@@ -4,6 +4,8 @@ import validator from 'validator'
 
 import bcrypt from 'bcrypt'
 import { USER } from '../constants/index.js'
+import Invoice from './Invoice.js'
+import Customer from './Customer.js'
 
 const schema = new mongoose.Schema({
   username: {
@@ -89,6 +91,13 @@ schema.pre('save', async function hash(next) {
     next()
   }
   this.password = await bcrypt.hash(this.password, 10)
+  next()
+})
+
+schema.pre('findOneAndDelete', async function deleteInvoice(next) {
+  const id = await this.model.findOne(this.getQuery()).select('_id')
+  await Invoice.deleteMany({ user: id }).exec()
+  await Customer.deleteMany({ createdBy: id }).exec()
   next()
 })
 

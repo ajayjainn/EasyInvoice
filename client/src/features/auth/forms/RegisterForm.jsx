@@ -230,6 +230,7 @@ const RegisterForm = () => {
 											Email Address*
 										</InputLabel>
 										<OutlinedInput
+											autoComplete="email"
 											id="email-signup"
 											value={values.email}
 											name="email"
@@ -259,6 +260,7 @@ const RegisterForm = () => {
 											Password
 										</InputLabel>
 										<OutlinedInput
+											autoComplete="new-password"
 											fullWidth
 											error={Boolean(
 												touched.password &&
@@ -346,6 +348,7 @@ const RegisterForm = () => {
 											Confirm Password
 										</InputLabel>
 										<OutlinedInput
+											autoComplete="new-password"
 											fullWidth
 											error={Boolean(
 												touched.passwordConfirm &&

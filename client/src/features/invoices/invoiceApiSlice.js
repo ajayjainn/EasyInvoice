@@ -2,7 +2,7 @@ import { baseApiSlice } from "../api/baseApiSlice";
 export const invoiceApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllInvoices: builder.query({
-      query: ({page,limit})=> `/invoices?page=${page}&limit=${limit}`,
+      query: ({ page, limit }) => `/invoices?page=${page}&limit=${limit}`,
       providesTags: ['Invoice']
     }),
     getInvoice: builder.query({
@@ -10,7 +10,7 @@ export const invoiceApiSlice = baseApiSlice.injectEndpoints({
       providesTags: ['Invoice']
     }),
     deleteInvoice: builder.mutation({
-      query: (id)=>({
+      query: (id) => ({
         url: `/invoices/${id}`,
         method: "DELETE"
       }),
@@ -25,14 +25,26 @@ export const invoiceApiSlice = baseApiSlice.injectEndpoints({
       invalidatesTags: ['Invoice']
     }),
     updateInvoice: builder.mutation({
-      query: (a)=>{
-        console.log(a,a.data)
-        return {
-        url:`/invoices/${a.id}`,
-        method:"PATCH",
+      query: (a) => ({
+        url: `/invoices/${a.id}`,
+        method: "PATCH",
         body: a.data
-      }},
+      }),
       invalidatesTags: ["Invoice"]
+    }),
+    createPayment: builder.mutation({
+      query: (a) => ({
+        url: `/invoices/${a.id}/payment`,
+        method: 'POST',
+        body: a.data
+      }),
+      invalidatesTags: ['Invoice']
+    }),
+    emailInvoice: builder.mutation({
+      query: (id)=> ({
+        url:`/invoices/${id}/sendInvoice`,
+        method:"POST"
+      })
     })
   })
 })
@@ -42,5 +54,7 @@ export const {
   useDeleteInvoiceMutation,
   useGetAllInvoicesQuery,
   useGetInvoiceQuery,
-  useUpdateInvoiceMutation
+  useUpdateInvoiceMutation,
+  useCreatePaymentMutation,
+  useEmailInvoiceMutation
 } = invoiceApiSlice

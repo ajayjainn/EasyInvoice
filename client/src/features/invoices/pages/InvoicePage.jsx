@@ -1,59 +1,75 @@
-import { Badge, Box, Button, Container, CssBaseline, Stack, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, Typography } from '@mui/material'
-import { useState } from 'react'
-import {useNavigate} from 'react-router-dom'
-import {toast} from 'react-toastify'
-import Spinner from '../../../components/Spinner'
-import StyledTableCell from '../../../components/StyledTableCell'
-import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions'
-import { useDeleteInvoiceMutation, useGetAllInvoicesQuery } from '../invoiceApiSlice'
-import StyledDivider from '../../../components/StyledDivider'
-import { FaFileInvoiceDollar } from "react-icons/fa6";
-import { MdAssignmentAdd } from "react-icons/md";
-import Paper from "@mui/material/Paper";
-import { TiDocumentDelete } from "react-icons/ti";
+import CalendarMonth from "@mui/icons-material/CalendarMonth";
+import NoteAdd from "@mui/icons-material/NoteAdd";
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import EditIcon from '@mui/icons-material/Edit';
+import AttachEmailIcon from '@mui/icons-material/AttachEmail';
+import CircularProgress from '@mui/material/CircularProgress';
+import {
+  Paper,
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Divider,
+  Grid,
+} from "@mui/material";
+import { format } from "date-fns";
 
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Spinner from "../../../components/Spinner";
+import StyledDivider from "../../../components/StyledDivider";
+import StyledTableCell from "../../../components/StyledTableCell";
+import StyledTableRow from "../../../components/StyledTableRow";
+import {
+  useGetInvoiceQuery,
+  useEmailInvoiceMutation
+} from "../invoiceApiSlice";
+import PaymentForm from "./PaymentForm";
+import { toast } from "react-toastify";
 
 const InvoicePage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const { data: doc ,isLoading} = useGetInvoiceQuery(id);
+  const [emailInvoice] = useEmailInvoiceMutation()
+  const [sendMail,setSendMail] = useState(false);
 
 
-  const navigate = useNavigate()
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const goBack = () => navigate(-1);
 
-  const {data, isLoading} = useGetAllInvoicesQuery({
-    page: page + 1,
-    limit: rowsPerPage,
-  })
-  const [deleteInvoice] = useDeleteInvoiceMutation()
+  const invoice = doc?.invoice;
 
-  const rows = data?.invoices || []
-
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.count) : 0;
-
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleDelete = async (id) => {
+  const handleSendMail = async ()=>{
+    setSendMail(true)
     try{
-      const result = await deleteInvoice(id).unwrap()
-      toast.success(result.message)
+      const resp = await emailInvoice(id).unwrap()
+      console.log(resp)
+      toast.success(resp.message)
     }catch(err){
       toast.error(err)
+    }finally{
+      setSendMail(false)
     }
   }
 
-  return (
-    <Container component="main" maxWidth="lg" sx={{ mt: 10,mb:20 }}>
-      <CssBaseline />
 
+  return (
+    <>
+
+    <Container
+      component="main"
+      maxWidth="md"
+      sx={{ mt: 15, mb: 5, padding: 3, border: "2px solid" }}
+    >
+      <CssBaseline />
       <Box
         sx={{
           display: "flex",
@@ -62,112 +78,282 @@ const InvoicePage = () => {
           alignItems: "center",
         }}
       >
+        <NoteAdd sx={{ fontSize: 70 }} />
+        <Typography variant="h3">INVOICE</Typography>
 
-        <Typography variant="h1"> Invoices </Typography>
-      </Box>
-      <StyledDivider />
-      <Stack
-				sx={{
-					display: "flex",
-					flexDirection: "row",
-          justifyContent: 'space-between'
-				}}
-			>
-        <Stack direction="row">
-
-				<Typography variant="h4"> Total: </Typography>
-				<Badge
-					badgeContent={data?.count || 0}
-					color="primary"
-					sx={{ marginTop: "3px", marginLeft: "5px" }}
-				>
-					<FaFileInvoiceDollar size={40} color="action" fontSize="large" />
-				</Badge>
-        </Stack>
-
-        <Button className="new-customer-btn" variant="contained" color='primary'
-        startIcon={<MdAssignmentAdd/>} onClick={()=>navigate('/invoices/new')}
+        <Button
+          color="warning"
+          size="small"
+          variant="contained"
+          onClick={goBack}
+          sx={{ fontSize: "1rem", ml: "10px" }}
         >
-          New Invoice
+          Go back
         </Button>
+      </Box>
 
-			</Stack>
+      <StyledDivider />
 
+      <Grid container spacing={2} sx={{ mt: "30px" }}>
+				<Grid item md={6}>
+					<Button
+						sx={{ borderRadius: "50px", cursor: "pointer" }}
+						fullWidth
+						variant="outlined"
+						color="primary"
+						size="small"
+						startIcon={<EditIcon fontSize="large" />}
+						onClick={() => navigate(`/invoices/${invoice.id}/edit`)}
+					>
+						<Typography variant="h5">
+							{" "}
+							Edit Invoice
+						</Typography>
+					</Button>
+				</Grid>
+
+				<Grid item md={6}>
+					{sendMail ? (
+						<Box
+							sx={{
+								display: "flex",
+								flexDirection: "row",
+								justifyContent: "center",
+							}}
+						>
+							<CircularProgress />
+						</Box>
+					) : (
+						<Button
+							sx={{
+								borderRadius: "50px",
+								cursor: "pointer",
+							}}
+							fullWidth
+							variant="outlined"
+							color="secondary"
+							size="small"
+							startIcon={<AttachEmailIcon />}
+							onClick={handleSendMail}
+						>
+							<Typography variant="h5">
+								Email Invoice to Customer
+							</Typography>
+						</Button>
+					)}
+				</Grid>
+			</Grid>
 
       {isLoading ? (
-				<Spinner />
-			) : (
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <TableHead>
-            <TableRow>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell align="right">Email</StyledTableCell>
-              <StyledTableCell align="right">Status</StyledTableCell>
-              <StyledTableCell align="right">Amount</StyledTableCell>
-              <StyledTableCell align="right">Delete Invoice</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow onClick={()=>navigate(`/invoices/edit/${row.id}`)} key={row.id}>
-                <TableCell style={{ width: 160 }} >
-                  {row.customer.name}
-                </TableCell>
-                <TableCell style={{ width: 160 }} >
-                  {row.customer.email}
-                </TableCell>
+        <Spinner />
+      ) : (
+        <Box
+          sx={{
+            mt: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+          component="form"
+          noValidate
+          autoComplete="off"
+        >
+          <Container>
+            <Grid
+              container
+              justifyContent="space-between"
+              sx={{ marginTop: "30px" }}
+            >
+              <Grid item sx={{ width: "50%", marginBottom: "40px" }}>
+                <Container>
+                  <Typography
+                    variant="h6"
+                    style={{ color: "5a5a5a", pl: "3px" }}
+                    textTransform="uppercase"
+                    gutterBottom
+                  >
+                    Send To
+                  </Typography>
+                  {invoice?.customer && (
+                    <>
+                      <Typography variant="subtitle1" gutterBottom>
+                        <b>Name: </b> {invoice.customer.name}
+                        <br />
+                        <b>Email: </b> {invoice.customer.email}
+                        <br />
+                        <b>Account No: </b> {invoice.customer.accountNo}
+                        <br />
+                        <b>Phone NO: </b> {invoice.customer.phoneNumber}
+                        <br />
+                        <b>Address: </b> {invoice.customer.address}
+                        <br />
+                      </Typography>
+                    </>
+                    )}
+              
+                </Container>
+              </Grid>
 
-                <TableCell style={{ width: 160 }} >
-                  {row.status}
-                </TableCell>
+              <Grid item style={{ marginRight: 20, textAlign: "right" }}>
+                <Typography
+                  sx={{ display: "flex" }}
+                  mb="10px"
+                  variant="body"
+                  gutterBottom
+                >
+                  <CalendarMonth sx={{ alignItems: "center" }} />
+                  Date Of Issue
+                  <Typography pl="5px" gutterBottom>
+                    <b>{format(new Date(invoice.createdAt), "do LLL yyyy")}</b>
+                  </Typography>
+                </Typography>
 
-                <TableCell style={{ width: 160 }} >
-                  {row.totalAmount}
-                </TableCell>
+                <Typography
+                  sx={{ display: "flex" }}
+                  mb="10px"
+                  variant="body"
+                  gutterBottom
+                >
+                  <CalendarMonth sx={{ alignItems: "center" }} />
+                  Due Date
+                  <Typography pl="5px" gutterBottom>
+                    <b>{invoice.dueDate && format(new Date(invoice.dueDate), "do LLL yyyy")}</b>
+                  </Typography>
+                </Typography>
+                <Typography
+                  sx={{ display: "flex" }}
+                  mb="10px"
+                  variant="body"
+                  gutterBottom
+                >
+                  <AccountBalanceWalletIcon sx={{ alignItems: "center" }}/>
+                  Status
+                  <Typography pl="5px" gutterBottom>
+                    <b>{invoice.status}</b>
+                  </Typography>
+                </Typography>
+              </Grid>
+            </Grid>
 
-                <TableCell style={{ width: 160 }} align="left">
-                  {/* delete user account */}
-                  <TiDocumentDelete
-                    sx={{ cursor: "pointer" }}
-                    color="error"
-                    fontSize="medium"
-                    size={40}
-                    onClick={()=>handleDelete(row.id)}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 75 * emptyRows }}>
-                <TableCell colSpan={5} />
-              </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={5}
-                count={data?.count || 0}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: {
-                    "aria-label": "rows per page",
-                  },
-                  native: true,
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>)}
+            <Divider />
+
+            <div>
+              <TableContainer component={Paper} sx={{ marginBottom: "50px" }}>
+                <Table sx={{ minWidth: 700 }}>
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="left">#</StyledTableCell>
+                      <StyledTableCell align="left">Product</StyledTableCell>
+                      <StyledTableCell align="left">Unit Price</StyledTableCell>
+                      <StyledTableCell align="left">Quantiy</StyledTableCell>
+                      <StyledTableCell align="left">Amount(Rs)</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {invoice.items?.map((item, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell align="left">
+                          {index + 1}
+                        </StyledTableCell>
+
+                        <StyledTableCell align="left">
+                          {item.name}
+                        </StyledTableCell>
+
+                        <StyledTableCell align="left">
+                          {item.rate}
+                          </StyledTableCell>
+
+                        <StyledTableCell align="left">
+                          {item.quantity}
+                        </StyledTableCell>
+
+                        <StyledTableCell align="left">
+                          ₹{(item.rate * item.quantity).toLocaleString()}
+                        </StyledTableCell>
+
+          
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+            </div>
+
+            <Box
+              sx={{
+                marginLeft: "50%",
+                textAlign: "left",
+                borderBottom: "1px solid ",
+              }}
+            >
+              <Typography
+                className="title"
+                sx={{ textAlign: "center", mb: "10px" }}
+                variant="h5"
+              >
+                Cost Summary
+              </Typography>
+
+              <Divider />
+
+              <div className="billItem">
+                <Typography variant="body2">Sub total:</Typography>
+                <h4>₹{invoice.subTotal.toFixed(2)}</h4>
+              </div>
+              <div className="billItem">
+                <Typography variant="body2">Tax Amount (%{Number(invoice.tax.toFixed(2))}):</Typography>
+                <h4>₹{invoice.tax*invoice.totalAmount*0.01}</h4>
+              </div>
+              <div className="billItem">
+                <Typography variant="h6">Total:</Typography>
+                <h4>₹{invoice.totalAmount.toFixed(2)}</h4>
+              </div>
+              <div className="billItem">
+                <Typography variant="body2">Amount Paid:</Typography>
+                <h4>₹{invoice.totalAmountReceived.toFixed(2)}</h4>
+              </div>
+              <div className="billItem">
+                <Typography variant="h6">Balance:</Typography>
+                <h4>₹{(invoice.totalAmount-invoice.totalAmountReceived).toFixed(2)}</h4>
+              </div>
+            </Box>
+
+            <Box
+              sx={{
+                marginTop: "30px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box item>
+                <Typography sx={{marginBottom:'4px'}} variant="h4" color="rgb(17, 65, 141)">
+                  <u>Remarks</u>
+                </Typography>
+                <Typography>
+                  {invoice.remarks|| 'Not Available'}
+                </Typography>
+              </Box>
+              <Box item>
+                <Typography sx={{marginBottom:'4px'}} variant="h4" color="rgb(17, 65, 141)">
+                  <u>Terms & Conditions</u>
+                </Typography>
+               <Typography>
+                {invoice.terms || 'Not Available'}
+               </Typography>
+              </Box>
+            </Box>
+
+          </Container>
+        </Box>
+      )}
     </Container>
-  )
-}
 
-export default InvoicePage
+    <PaymentForm id={id}/>
+    </>
+  );
+};
+
+export default InvoicePage;

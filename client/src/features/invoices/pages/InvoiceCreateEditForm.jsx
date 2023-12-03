@@ -125,7 +125,7 @@ const InvoiceCreateEditForm = () => {
         response = await createInvoice(dataToSend).unwrap();
       }
       toast.success(response?.message);
-      navigate("/invoices");
+      goBack()
     } catch (err) {
       console.log(err.data.message);
       toast.error(err.data.message);
@@ -149,7 +149,7 @@ const InvoiceCreateEditForm = () => {
   return (
     <Container
       component="main"
-      maxWidth="lg"
+      maxWidth="md"
       sx={{ mt: 15, mb: 20, padding: 3, border: "2px solid" }}
     >
       <CssBaseline />
@@ -176,6 +176,7 @@ const InvoiceCreateEditForm = () => {
       </Box>
 
       <StyledDivider />
+      
 
       {isLoading || updateInvoiceLoading ? (
         <Spinner />
@@ -217,7 +218,7 @@ const InvoiceCreateEditForm = () => {
                         <br />
                         <b>Account No: </b> {customer.accountNo}
                         <br />
-                        <b>Phone NO: </b> {customer.phoneNumber}
+                        <b>Phone No: </b> {customer.phoneNo}
                         <br />
                         <b>Address: </b> {customer.address}
                         <br />
@@ -391,9 +392,10 @@ const InvoiceCreateEditForm = () => {
 
             <Box
               sx={{
-                marginLeft: "70%",
+                marginLeft: "50%",
                 textAlign: "left",
                 borderBottom: "1px solid ",
+                marginBottom:"50px"
               }}
             >
               <Typography
@@ -407,11 +409,11 @@ const InvoiceCreateEditForm = () => {
               <Divider />
 
               <div className="billItem">
-                <Typography variant="h5">Sub total:</Typography>
+                <Typography variant="body1">Sub total:</Typography>
                 <h4>₹{subTotal.toFixed(2)}</h4>
               </div>
               <div className="billItem">
-                <Typography variant="h5">Tax Amount:</Typography>
+                <Typography variant="body1">Tax Amount:</Typography>
                 <h4>₹{taxAmount}</h4>
               </div>
               <div className="billItem">

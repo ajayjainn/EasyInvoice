@@ -16,17 +16,17 @@ const createCustomer = expressAsyncHandler(async (req, res) => {
     throw new Error('Customer already exists.')
   }
 
-  const createdCustomer = await newCustomer.save()
-  if (!createdCustomer) {
+  try {
+    const createdCustomer = await newCustomer.save()
+    res.status(200).json({
+      success: true,
+      message: 'Customer created successfully',
+      createdCustomer,
+    })
+  } catch (err) {
     res.status(400)
-    throw new Error('Customer could not be saved.')
+    throw new Error(err.message)
   }
-
-  res.status(200).json({
-    success: true,
-    message: 'Customer created successfully',
-    createdCustomer,
-  })
 })
 
 export default createCustomer
