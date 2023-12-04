@@ -414,11 +414,11 @@ const InvoiceCreateEditForm = () => {
               </div>
               <div className="billItem">
                 <Typography variant="body1">Tax Amount:</Typography>
-                <h4>₹{taxAmount}</h4>
+                <h4>₹{taxAmount.toFixed(2)}</h4>
               </div>
               <div className="billItem">
                 <Typography variant="h5">Total:</Typography>
-                <h4>₹{totalAmount.toLocaleString()}</h4>
+                <h4>₹{totalAmount.toFixed(2)}</h4>
               </div>
             </Box>
 

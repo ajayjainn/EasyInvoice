@@ -61,7 +61,12 @@ export const usersApiSlice = baseApiSlice.injectEndpoints({
           body: formData,
         }
       }
-    })
+    }),
+    getDashboardData: builder.query({
+      query: () => '/user/dashboard',
+      providesTags: ["Customer","Invoice"]
+    }),
+
   })
 })
 export const {
@@ -72,6 +77,7 @@ export const {
   useDeleteUserMutation,
   useDeactivateUserMutation,
   useActivateUserMutation,
-  useUpdateAvatarMutation
+  useUpdateAvatarMutation,
+  useGetDashboardDataQuery
 } = usersApiSlice
 

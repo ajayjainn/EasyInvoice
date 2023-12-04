@@ -11,10 +11,10 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import BarChartIcon from "@mui/icons-material/BarChart";
+import TimelineIcon from '@mui/icons-material/Timeline';
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import DescriptionIcon from '@mui/icons-material/Description';
 import useAuthUser from "../../hooks/useAuthUser";
 
 const StyledList = styled(List)({
@@ -54,7 +54,7 @@ const MenuList = () => {
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => navigate("/dashboard")}>
 						<ListItemIcon>
-							<BarChartIcon
+							<TimelineIcon
 								sx={{ fontSize: 40 }}
 								color="indigo"
 							/>
@@ -69,7 +69,7 @@ const MenuList = () => {
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => navigate("/invoices")}>
 						<ListItemIcon>
-							<PointOfSaleIcon
+							<DescriptionIcon
 								sx={{ fontSize: 40 }}
 								color="orange"
 							/>

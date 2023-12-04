@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import useTitle from '../../../hooks/useTitle';
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGetUserProfileQuery, useUpdateAvatarMutation, useUpdateUserProfileMutation } from '../usersApiSlice';
 import { toast } from 'react-toastify';
 import BrowserUpdatedIcon from "@mui/icons-material/BrowserUpdated";
@@ -20,7 +20,6 @@ import {
 	CssBaseline,
 	Grid,
 	Input,
-	styled,
 	TextField,
 	Typography,
 } from "@mui/material";
@@ -44,7 +43,7 @@ const EditProfilePage = () => {
   const isValidPhoneNumber = validator.isMobilePhone(fields.phoneNumber?fields.phoneNumber:"");
 
   const [updateProfile,{data:updatedData,isSuccess,isLoading:isUpdating}] = useUpdateUserProfileMutation()
-  const [updateAvatar, {data:updatedAvatar,isLoading:isUploading}] = useUpdateAvatarMutation()
+  const [updateAvatar, {isLoading:isUploading}] = useUpdateAvatarMutation()
 
   useEffect(()=>{
     if(data) setFields(data.user)

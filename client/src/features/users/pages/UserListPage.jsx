@@ -97,13 +97,14 @@ const UserListPage = () => {
         }}
       >
         <MdOutlineBadge className="auth-svg" />
-        <Typography variant="h1"> Users</Typography>
+        <Typography pl="5px" variant="h1"> Users</Typography>
       </Box>
       <StyledDivider />
       <Box
 				sx={{
 					display: "flex",
 					flexDirection: "row",
+          m:4
 				}}
 			>
 				<Typography variant="h4"> Total: </Typography>

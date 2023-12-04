@@ -9,8 +9,8 @@ const getInvoice = expressAsyncHandler(async (req, res) => {
   }
 
   const invoice = await Invoice.findById(id)
-    .populate('customer', 'name email')
-    .populate('user', 'name email')
+    .populate('customer', 'name email phoneNo address accountNo')
+    .populate('user', 'name email buisnessName address phoneNumber')
 
   if (!invoice) {
     res.status(404)

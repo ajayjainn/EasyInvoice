@@ -87,6 +87,7 @@ const CustomersListPage = () => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          m:4,
         }}
       >
         <Stack direction="row">
@@ -124,32 +125,32 @@ const CustomersListPage = () => {
           <Table sx={{ minWidth: 300 }} aria-label="custom pagination table">
             <TableHead>
               <TableRow>
-                <StyledTableCell align="center">Name</StyledTableCell>
-                <StyledTableCell align="center">Email</StyledTableCell>
-                <StyledTableCell align="center">Address</StyledTableCell>
-                <StyledTableCell align="center">Account Number</StyledTableCell>
-                <StyledTableCell align="center">Delete</StyledTableCell>
+                <StyledTableCell align="right">Name</StyledTableCell>
+                <StyledTableCell align="right">Email</StyledTableCell>
+                <StyledTableCell align="right">Address</StyledTableCell>
+                <StyledTableCell align="right">Account Number</StyledTableCell>
+                <StyledTableCell align="right">Delete</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell style={{ width: 160 }} align="center">
+                  <TableCell style={{ width: 160 }} >
                     {row.name}
                   </TableCell>
-                  <TableCell style={{ width: 160 }} align="center">
+                  <TableCell style={{ width: 160 }}>
                     {row.email}
                   </TableCell>
 
-                  <TableCell style={{ width: 160 }} align="center">
+                  <TableCell style={{ width: 160 }} >
                     {row.address}
                   </TableCell>
 
-                  <TableCell style={{ width: 160 }} align="center">
+                  <TableCell style={{ width: 160 }} >
                     {row.accountNo}
                   </TableCell>
 
-                  <TableCell style={{ width: 160 }} align="center">
+                  <TableCell style={{ width: 160 }} >
                     {/* delete user account */}
                     <PersonRemoveIcon
                       sx={{ cursor: "pointer" }}

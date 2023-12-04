@@ -67,7 +67,7 @@ const schema = new mongoose.Schema({
   address: String,
   buisnessName: String,
 
-  phoneNumber: {
+  phoneNo: {
     type: String,
     validate: [validator.isMobilePhone, 'Provide a valid phone number.'],
   },

@@ -8,6 +8,7 @@ import deactivateUserAccount from '../controllers/user/deactivateUserAccount.js'
 import getAllUsers from '../controllers/user/getAllUsersController.js'
 import role from '../middleware/roleMiddleware.js'
 import activateUserAccount from '../controllers/user/activateUserAccount.js'
+import dashboardData from '../controllers/dashboard/dashboardData.js'
 
 const router = express.Router()
 
@@ -18,5 +19,6 @@ router.delete('/:id', checkAuth, role.checkRole(role.ROLES.Admin), deleteUserAcc
 router.patch('/:id/deactivate', checkAuth, role.checkRole(role.ROLES.Admin), deactivateUserAccount)
 router.patch('/:id/activate', checkAuth, role.checkRole(role.ROLES.Admin), activateUserAccount)
 router.get('/all', checkAuth, role.checkRole(role.ROLES.Admin), getAllUsers)
+router.get('/dashboard', checkAuth, dashboardData)
 
 export default router
