@@ -62,7 +62,7 @@ const HomePage = () => {
                 size="large"
                 sx={{ fontSize: "1.5em", borderRadius: "25px" }}
               >
-                {!roles ? (
+                {roles.length===0 ? (
                   <Link
                     component={RouterLink}
                     to="/register"

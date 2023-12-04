@@ -10,13 +10,14 @@ import TablePaginationActions from "../../../components/TablePaginationActions";
 import React, { useEffect } from "react";
 import { Badge, Box, Checkbox, Container, CssBaseline, TableHead, Typography, styled } from "@mui/material";
 import { useActivateUserMutation, useDeleteUserMutation, useGetAllUsersQuery } from "../usersApiSlice";
-import ClearIcon from "@mui/icons-material/Clear";
 import { MdOutlineBadge } from "react-icons/md";
 import Spinner from "../../../components/Spinner";
 import StyledDivider from "../../../components/StyledDivider";
 import GroupIcon from "@mui/icons-material/Group";
 import { useDeactivateUserMutation } from "../usersApiSlice";
 import { toast } from "react-toastify";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -76,6 +77,8 @@ const UserListPage = () => {
     }
   }
   const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this user?"))
+      return;
     try{
       const result = await deleteUser(id).unwrap()
       toast.success(result.message)
@@ -120,16 +123,16 @@ const UserListPage = () => {
 				<Spinner />
 			) : (
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+        <Table sx={{ minWidth: 300 }} aria-label="custom pagination table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Email</StyledTableCell>
-              <StyledTableCell align="right">Username</StyledTableCell>
-              <StyledTableCell align="right">Provider</StyledTableCell>
-              <StyledTableCell align="right">Is Email Verifi</StyledTableCell>
-              <StyledTableCell align="right">Roles</StyledTableCell>
-              <StyledTableCell align="right">Active</StyledTableCell>
-              <StyledTableCell align="right">Delete</StyledTableCell>
+              <StyledTableCell >Email</StyledTableCell>
+              <StyledTableCell >Username</StyledTableCell>
+              <StyledTableCell >Provider</StyledTableCell>
+              <StyledTableCell >Is Email Verified</StyledTableCell>
+              <StyledTableCell >Roles</StyledTableCell>
+              <StyledTableCell >Active</StyledTableCell>
+              <StyledTableCell >Delete</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -138,30 +141,30 @@ const UserListPage = () => {
                 <TableCell component="th" scope="row">
                   {row.email}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} >
                   {row.username}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} >
                   {row.provider}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} >
                   {row.isEmailVerified.toString()}
                 </TableCell>
 
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} >
                   {row.roles.join(", ")}
                 </TableCell>
 
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} >
                   {/* deactivate user account */}
                   <Box>
                     <Checkbox checked={row.active} onClick={(e)=>handleDeactivate(e,row.id)}/>
                   </Box>
                 </TableCell>
 
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }}>
                   {/* delete user account */}
-                  <ClearIcon
+                  <PersonRemoveIcon
                     sx={{ cursor: "pointer" }}
                     color="error"
                     fontSize="medium"

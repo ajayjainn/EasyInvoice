@@ -10,6 +10,10 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Provide a email and a password!')
   }
   const existingUser = await User.findOne({ email }).select('+password')
+  if (existingUser.provider === 'google') {
+    res.status(400)
+    throw new Error('Failed! Account was registered using Google SignUp.')
+  }
   if (!existingUser || !(await existingUser.comparePassword(password))) {
     res.status(401)
     systemLogs.error('Incorrect email or password')

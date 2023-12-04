@@ -59,6 +59,8 @@ const CustomersListPage = () => {
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this customer's account?"))
+      return;
     try {
       const result = await deleteCustomer(id).unwrap();
       toast.success(result.message);

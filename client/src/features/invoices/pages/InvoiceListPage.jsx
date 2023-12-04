@@ -28,11 +28,11 @@ import {
 import StyledDivider from "../../../components/StyledDivider";
 import { MdAssignmentAdd } from "react-icons/md";
 import Paper from "@mui/material/Paper";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import addBillSvg from "../../../assets/images/add_bill.svg";
-import '../../../assets/styles/customer-button.css'
-import FileOpenIcon from '@mui/icons-material/FileOpen';
-import { LiaFileInvoiceDollarSolid} from "react-icons/lia";
+import "../../../assets/styles/customer-button.css";
+import FileOpenIcon from "@mui/icons-material/FileOpen";
+import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 
 const InvoicePage = () => {
   const navigate = useNavigate();
@@ -60,12 +60,12 @@ const InvoicePage = () => {
   };
 
   const handleDelete = async (id) => {
-    
-    if(!window.confirm('Are you sure you want to delete this invoice?')) return;
+    if (!window.confirm("Are you sure you want to delete this invoice?"))
+      return;
     try {
       const result = await deleteInvoice(id).unwrap();
       toast.success(result.message);
-      navigate('/invoices')
+      navigate("/invoices");
     } catch (err) {
       toast.error(err);
     }
@@ -81,11 +81,14 @@ const InvoicePage = () => {
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
-          fontSize:"6rem",
+          fontSize: "6rem",
         }}
       >
-        <LiaFileInvoiceDollarSolid/>
-        <Typography pl="5px" variant="h1"> Invoices </Typography>
+        <LiaFileInvoiceDollarSolid />
+        <Typography pl="5px" variant="h1">
+          {" "}
+          Invoices{" "}
+        </Typography>
       </Box>
       <StyledDivider />
       <Stack
@@ -93,7 +96,7 @@ const InvoicePage = () => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          m:4
+          m: 4,
         }}
       >
         <Stack direction="row">
@@ -103,7 +106,11 @@ const InvoicePage = () => {
             color="primary"
             sx={{ marginTop: "3px", marginLeft: "5px" }}
           >
-            <LiaFileInvoiceDollarSolid size={40} color="action" fontSize="large" />
+            <LiaFileInvoiceDollarSolid
+              size={40}
+              color="action"
+              fontSize="large"
+            />
           </Badge>
         </Stack>
 
@@ -126,7 +133,10 @@ const InvoicePage = () => {
             No Invoices Added yet! Click on the button above to add a new
             invoice!
           </Typography>
-          <img style={{display:"block", width:"60%", margin:"auto"}} src={addBillSvg} />
+          <img
+            style={{ display: "block", width: "60%", margin: "auto" }}
+            src={addBillSvg}
+          />
         </>
       ) : (
         <TableContainer component={Paper}>
@@ -137,15 +147,13 @@ const InvoicePage = () => {
                 <StyledTableCell align="right">Email</StyledTableCell>
                 <StyledTableCell align="right">Status</StyledTableCell>
                 <StyledTableCell align="right">Amount</StyledTableCell>
-                <StyledTableCell align="right">Open</StyledTableCell>
+                <StyledTableCell align="right">View</StyledTableCell>
                 <StyledTableCell align="right">Delete Invoice</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows?.map((row) => (
-                <TableRow
-                  key={row.id}
-                >
+                <TableRow key={row.id}>
                   <TableCell style={{ width: 160 }}>
                     {row.customer?.name}
                   </TableCell>
@@ -159,8 +167,15 @@ const InvoicePage = () => {
                     {row.totalAmount}
                   </TableCell>
 
-                  <TableCell  sx={{ width: 160, }}>
-                    <FileOpenIcon sx={{cursor:'pointer'}} onClick={() => navigate(`/invoices/${row.id}`)}/>
+                  <TableCell sx={{ width: 160 }}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<FileOpenIcon />}
+                      onClick={() => navigate(`/invoices/${row.id}`)}
+                    >
+                      View
+                    </Button>
                   </TableCell>
 
                   <TableCell style={{ width: 160 }} align="left">
